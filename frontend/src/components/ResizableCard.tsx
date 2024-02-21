@@ -5,12 +5,10 @@ import useResize, { SizeType } from "../hooks/useResize";
 export default function ResizableCard({
   id,
   className,
-  text,
   cardConfig,
 }: {
   className?: string;
   id: keyof CardConfigType;
-  text: string;
   cardConfig: BoxDataType;
 }) {
   const { updateCardSize } = useContext(SharedSizeContext);
@@ -36,7 +34,11 @@ export default function ResizableCard({
       style={{ width: size.width, height: size.height, ...cardConfig.styles }}
     >
       <div className="resizable_card_inner">
-        <p>{text}</p>
+        <p>{cardConfig.content}</p>
+      </div>
+      <div className="actions">
+        <button title="Replace the current Text Fully">Add</button>
+        <button title="Edit the current Text">Edit</button>
       </div>
       <div
         className="dragHandle"

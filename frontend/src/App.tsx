@@ -1,4 +1,4 @@
-import { CSSProperties } from "react";
+import { CSSProperties, ReactNode } from "react";
 import { createContext, useState } from "react";
 import "./App.css";
 import ResizableCard from "./components/ResizableCard";
@@ -7,6 +7,7 @@ import { SizeType } from "./hooks/useResize";
 export type BoxDataType = {
   styles?: CSSProperties;
   size: SizeType;
+  content: ReactNode;
 };
 
 export type CardConfigType = { [key: string]: BoxDataType };
@@ -21,9 +22,9 @@ export const SharedSizeContext = createContext<{
 
 function App() {
   const [cardConfigs, setCardConfigs] = useState<CardConfigType>({
-    card1: { size: { height: 400, width: 600 } },
-    card2: { size: { height: 400, width: 600 } },
-    card3: { size: { height: 300, width: 700 } },
+    card1: { size: { height: 400, width: 600 }, content: "Card 1" },
+    card2: { size: { height: 400, width: 600 }, content: "Card 2" },
+    card3: { size: { height: 300, width: 700 }, content: "Card 3" },
   });
 
   const getDelta = (
@@ -54,7 +55,7 @@ function App() {
   ): CardConfigType => {
     const newConfig = {
       ...prevConfig,
-      [id]: { ...prevConfig[id].styles, size: newSize },
+      [id]: { ...prevConfig[id], size: newSize },
     };
     const delta = getDelta(prevConfig[id].size, newSize);
     // logic to update other related cards
@@ -95,9 +96,9 @@ function App() {
       value={{ cardSizes: cardConfigs, updateCardSize }}
     >
       <main>
-        <ResizableCard id="card1" text="HEY" cardConfig={cardConfigs.card1} />
-        <ResizableCard id="card2" text="HEY" cardConfig={cardConfigs.card2} />
-        <ResizableCard id="card3" text="HEY" cardConfig={cardConfigs.card3} />
+        <ResizableCard id="card1" cardConfig={cardConfigs.card1} />
+        <ResizableCard id="card2" cardConfig={cardConfigs.card2} />
+        <ResizableCard id="card3" cardConfig={cardConfigs.card3} />
       </main>
     </SharedSizeContext.Provider>
   );

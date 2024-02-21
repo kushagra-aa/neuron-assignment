@@ -61,6 +61,30 @@ main {
       margin-top: calc(var(--handle-width) + 5px);
     }
 
+    & > .actions {
+      position: absolute;
+      top: 0;
+      left: 0;
+      background: #00000049;
+      display: flex;
+      flex-wrap: wrap;
+      width: inherit;
+      height: inherit;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.45s ease-in-out;
+    }
+
+    &:hover {
+      & > .actions {
+        opacity: 1;
+        pointer-events: all;
+      }
+    }
+
     &#card1 {
       grid-area: card1;
     }
