@@ -21,17 +21,73 @@ export const SharedSizeContext = createContext<{
 
 function App() {
   const [cardConfigs, setCardConfigs] = useState<CardConfigType>({
-    card1: { size: { height: 300, width: 300 } },
-    card2: { size: { height: 300, width: 300 } },
-    card3: { size: { height: 300, width: 300 } },
+    card1: { size: { height: 400, width: 600 } },
+    card2: { size: { height: 400, width: 600 } },
+    card3: { size: { height: 300, width: 700 } },
   });
+
+  const getDelta = (
+    prevSize: SizeType,
+    newSize: SizeType
+  ): { type: "height" | "width" | "both" | "none"; value: number } => {
+    let type: "height" | "width" | "both" | "none" = "none";
+    let value = 0;
+    const diffInBoth = {
+      height: newSize.height - prevSize.height,
+      width: newSize.width - prevSize.width,
+    };
+    // both implementation is undone
+    if (diffInBoth.height !== 0) {
+      type = "height";
+      value = diffInBoth.height;
+    } else if (diffInBoth.width !== 0) {
+      type = "width";
+      value = diffInBoth.width;
+    }
+
+    return { type, value };
+  };
+  const updateCardConfig = (
+    prevConfig: CardConfigType,
+    id: keyof CardConfigType,
+    newSize: SizeType
+  ): CardConfigType => {
+    const newConfig = {
+      ...prevConfig,
+      [id]: { ...prevConfig[id].styles, size: newSize },
+    };
+    const delta = getDelta(prevConfig[id].size, newSize);
+    // logic to update other related cards
+    if (id === "card1") {
+      if (delta.type === "height") {
+        newConfig.card3.size.height = newConfig.card3.size.height - delta.value;
+        newConfig.card2.size.height = newConfig.card2.size.height + delta.value;
+      }
+      if (delta.type === "width") {
+        newConfig.card2.size.width = newConfig.card2.size.width - delta.value;
+      }
+    }
+    if (id === "card2") {
+      if (delta.type === "height") {
+        newConfig.card3.size.height = newConfig.card3.size.height - delta.value;
+        newConfig.card1.size.height = newConfig.card1.size.height + delta.value;
+      }
+      if (delta.type === "width") {
+        newConfig.card1.size.width = newConfig.card1.size.width - delta.value;
+      }
+    }
+    if (id === "card2") {
+      if (delta.type === "height") {
+        newConfig.card2.size.height = newConfig.card3.size.height - delta.value;
+        newConfig.card1.size.height = newConfig.card1.size.height - delta.value;
+      }
+    }
+    return newConfig;
+  };
 
   const updateCardSize = (id: keyof CardConfigType, newSize: SizeType) => {
     // Update shared state with new size for the specific card
-    setCardConfigs((prevSizes) => ({
-      ...prevSizes,
-      [id]: { ...prevSizes[id].styles, size: newSize },
-    }));
+    setCardConfigs((prevSizes) => updateCardConfig(prevSizes, id, newSize));
   };
 
   return (
