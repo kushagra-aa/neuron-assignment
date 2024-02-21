@@ -1,13 +1,22 @@
+import { useContext } from "react";
+import { BoxDataType, CardConfigType, SharedSizeContext } from "../App";
 import useResize, { SizeType } from "../hooks/useResize";
 
 export default function ResizableCard({
+  id,
+  className,
   text,
-  initialSize,
+  cardConfig,
 }: {
+  className?: string;
+  id: keyof CardConfigType;
   text: string;
-  initialSize: SizeType;
+  cardConfig: BoxDataType;
 }) {
-  const onSizeChange = () => {};
+  const { updateCardSize } = useContext(SharedSizeContext);
+  const onSizeChange = (size: SizeType) => {
+    updateCardSize(id, size);
+  };
   const {
     size,
     ref: handleRef,
@@ -17,15 +26,18 @@ export default function ResizableCard({
     mouseDownHandlerRight,
   } = useResize<HTMLDivElement>({
     onSizeChange,
-    initialSize,
+    initialSize: cardConfig.size,
   });
 
   return (
     <div
-      className="drag-container"
-      style={{ width: size.width, height: size.height }}
+      className={`${className} resizable_card`}
+      id={`${id}`}
+      style={{ width: size.width, height: size.height, ...cardConfig.styles }}
     >
-      <h1>{text}</h1>
+      <div className="resizable_card_inner">
+        <p>{text}</p>
+      </div>
       <div
         className="dragHandle"
         id="top"

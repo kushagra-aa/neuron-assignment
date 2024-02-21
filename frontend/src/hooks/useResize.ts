@@ -19,7 +19,7 @@ export default function useResize<ElementType>({
     width: initialSize.width,
     height: initialSize.height,
   });
-  const minimumSize = minSize && minSize >= 0 ? minSize : 50;
+  const minimumSize = minSize && minSize >= 0 ? minSize : 100;
 
   // Calculate new size(Height or Width) based on initial position(mouseDownY), distance moved(pageY), and current size(currSize)
   // Then Validate it to pass the constraints, ie: minimum and maximum size
@@ -30,9 +30,10 @@ export default function useResize<ElementType>({
     windowSize: number
   ) => {
     const calculatedWidth = currSize - mouseDownSize + pageSize;
+    const maxSize = windowSize * 0.9 - 50;
 
     if (calculatedWidth < minimumSize) return minimumSize;
-    if (calculatedWidth > windowSize * 0.9) return windowSize * 0.9;
+    if (calculatedWidth > maxSize) return maxSize;
     return calculatedWidth;
   };
 

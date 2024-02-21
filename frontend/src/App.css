@@ -2,57 +2,73 @@ main {
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
+  display: grid;
   align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-}
+  justify-items: center;
+  grid-template-areas:
+    "card1 card2"
+    "card3 card3";
+  gap: 1rem;
 
-.drag-container {
-  position: relative;
-  background: rebeccapurple;
-  border: 1px solid red;
+  .resizable_card {
+    --handle-width: 25px;
 
-  & > .dragHandle {
-    --handle-width: 10px;
-    --handle-bg-color: violet;
-    position: absolute;
-    user-select: none;
-    background: var(--handle-bg-color);
-    cursor: grab;
+    position: relative;
+    background: rgba(102, 51, 153, 0.514);
+    border: 1px solid rgba(255, 0, 0, 0.733);
 
-    &#top {
+    & > .dragHandle {
       --handle-bg-color: violet;
-      width: inherit;
-      height: var(--handle-width);
-      top: 0;
-      left: 0;
-      right: 0;
+
+      opacity: 0.5;
+      position: absolute;
+      user-select: none;
+      background: var(--handle-bg-color);
+      cursor: grab;
+
+      &#top {
+        width: inherit;
+        height: var(--handle-width);
+        top: 0;
+        left: 0;
+        right: 0;
+      }
+      &#bottom {
+        width: inherit;
+        height: var(--handle-width);
+        bottom: 0;
+        left: 0;
+        right: 0;
+      }
+      &#left {
+        height: inherit;
+        width: var(--handle-width);
+        top: 0;
+        bottom: 0;
+        left: 0;
+      }
+      &#right {
+        height: inherit;
+        width: var(--handle-width);
+        top: 0;
+        bottom: 0;
+        right: 0;
+      }
     }
-    &#bottom {
-      --handle-bg-color: tomato;
-      width: inherit;
-      height: var(--handle-width);
-      bottom: 0;
-      left: 0;
-      right: 0;
+
+    & > .resizable_card_inner {
+      margin-left: calc(var(--handle-width) + 5px);
+      margin-top: calc(var(--handle-width) + 5px);
     }
-    &#left {
-      --handle-bg-color: pink;
-      height: inherit;
-      width: var(--handle-width);
-      top: 0;
-      bottom: 0;
-      left: 0;
+
+    &#card1 {
+      grid-area: card1;
     }
-    &#right {
-      --handle-bg-color: salmon;
-      height: inherit;
-      width: var(--handle-width);
-      top: 0;
-      bottom: 0;
-      right: 0;
+    &#card2 {
+      grid-area: card2;
+    }
+    &#card3 {
+      grid-area: card3;
     }
   }
 }
